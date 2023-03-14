@@ -93,11 +93,12 @@ app.get('/git-repo-detail/:owner?/:repo_name?', async(req,res)=>{
             owner: OWNER,
             repo: REPO
         });
-        await octokit.request('GET /repos/{owner}/{repo}/contents/{path}?ref=developer', {
+        await octokit.request('GET /repos/{owner}/{repo}/contents/{path}?ref=main', {
             owner: OWNER,
             repo: REPO,
             path: "README.md"
         }).then((data)=>{
+            console.log("file data : ",data)
             let buff = new Buffer( data.data.content, 'base64');
             let text = buff.toString('ascii');
             result.data.fileContent = text || "";
@@ -111,7 +112,7 @@ app.get('/git-repo-detail/:owner?/:repo_name?', async(req,res)=>{
         }).catch((err) =>  {
             result.data.noOfFiles = 0;
         });
-        
+        console.log("git-repo-detail : ",result)
         res.send(result.data);
     }catch(err){
         res.send({
